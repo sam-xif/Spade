@@ -1,0 +1,4 @@
+Spade
+
+Application Functionality: Stores and exposes a search API for Highlights comments
+The library: provides functionality for querying a comment database and determining the context and location of a comment within an HTML page
