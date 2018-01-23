@@ -1,6 +1,6 @@
 # Spade
 
 ### Dependencies
-* sqlalchemy
-* sqlalchemy-migrate
-* pysqlite
+* `sqlalchemy`
+* `sqlalchemy-migrate`
+* `pysqlite`
