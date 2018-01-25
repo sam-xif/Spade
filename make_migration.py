@@ -11,13 +11,13 @@ import re
 # Variables which hold values of arguments
 message = None
 repo_dir = 'migrate_repo'
-schema_file = 'src/models.py'
+schema_file = 'src/db/models.py'
 model_name = schema_file.replace('.py', '').replace('/', '.').replace('\\', '.') + '.metadata'
 to_stdout = False
 dry = False
-
 models_dir = '{0}/versions/models'.format(repo_dir)
 models_dir_modified = False
+
 # Loop that grabs command line arguments
 i = 1
 while i < len(sys.argv):
@@ -75,8 +75,6 @@ while i < len(sys.argv):
 if message is None:
     print('ERROR: Missing positional argument: MESSAGE')
     exit()
-
-
 
 # Function which loops through versions directory, getting migration script with highest version number, which represents the current schema of the database
 def get_most_recent_script():
