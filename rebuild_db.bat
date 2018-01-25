@@ -8,10 +8,11 @@ rem TODO: Remove requirement for sed by using the migrate command to generate a 
 setlocal enableDelayedExpansion
 
 rem Change any of these variables to reflect your environment
+set PROJECT_NAME=spade
 set REPO=migrate_repo
 set EXT=db
 set MANAGE_SCRIPT=manage.py
-set DB_NAME=schedule.%EXT%
+set DB_NAME=%PROJECT_NAME%.%EXT%
 set UPGRADE=1
 
 rem Process command-line args
