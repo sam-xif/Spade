@@ -1,0 +1,6 @@
+sqlalchemy
+sqlalchemy-migrate
+pysqlite
+nltk
+beautifulsoup4
+sed
