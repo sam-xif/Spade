@@ -18,9 +18,13 @@ from sqlalchemy import *
 Base = declarative_base()
 
 
-class Comment:
+class Highlight:
     __tablename__ = 'comments'
     
     ID = Column(Integer, primary_key=True)
     selection = Column(String)
     content = Column(String)
+    tags = Column(String)
+    url = Column(String)
+    date = Column(String)
+    
