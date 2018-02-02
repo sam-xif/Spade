@@ -18,8 +18,8 @@ from sqlalchemy import *
 Base = declarative_base()
 
 
-class Highlight:
-    __tablename__ = 'comments'
+class Highlight(Base):
+    __tablename__ = 'highlights'
     
     ID = Column(Integer, primary_key=True)
     selection = Column(String)
