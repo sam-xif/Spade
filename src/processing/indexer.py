@@ -3,6 +3,7 @@ indexer.py
 """
 
 import nltk
+from nltk.tokenize import TweetTokenizer
 #from nltk.tokenize.punkt import word_tokenize
 from index import Index
 
@@ -16,14 +17,29 @@ class Indexer:
         Main indexing function
         """
         pass
+        
+class BasicIndexer(Indexer):
+    def __init__(self):
+        pass
+
+    def index(self, data):
+        # As of now, the data is expected to be text
+        tok = TweetTokenizer(strip_handles=True, reduce_len=True)
+        words = tok.tokenize(data)
+        
+        
+        pos_tagged_words = nltk.pos_tag(words)
+        
 
 class POSIndexer(Indexer):
     def __init__(self):
-        self.index_ = Index()
+        pass
 
     def index(self, data):
-        # The data is expected to be text
-        words = nltk.word_tokenize(data)
+        # As of now, the data is expected to be text
+        tok = TweetTokenizer(strip_handles=True, reduce_len=True)
+        words = tok.tokenize(data)
         pos_tagged_words = nltk.pos_tag(words)
+        
         
         print(pos_tagged_words)

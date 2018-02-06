@@ -1,7 +1,7 @@
 """
 models.py
 
-This file should contain a reflection of the database schema.
+This file comtains a reflection of the database schema.
 The classes are linked to tables in the database with the sqlalchemy Declarative API.
 
 If a change to this schema is made, it is important to follow these steps to perform a migration of the database:
@@ -28,3 +28,4 @@ class Highlight(Base):
     url = Column(String)
     date = Column(String)
     
+metadata = Base.metadata
