@@ -18,18 +18,26 @@ class Indexer:
         """
         pass
         
+    def preprocess(self, document):
+        pass
+        
 class BasicIndexer(Indexer):
     def __init__(self):
         pass
 
     def index(self, data):
         # As of now, the data is expected to be text
+        pass
+        
+    def preprocess(self, document):
+        # Tweet tokenize
+        # Remove stopwords
+        # Porter stemmer
+        
         tok = TweetTokenizer(strip_handles=True, reduce_len=True)
-        words = tok.tokenize(data)
+        words = tok.tokenize(document)
         
-        
-        pos_tagged_words = nltk.pos_tag(words)
-        
+        pass
 
 class POSIndexer(Indexer):
     def __init__(self):

@@ -15,7 +15,7 @@ class Index:
         self.indexer_object = indexer_object
         
     def preprocess(self, document):
-        pass
+        self.indexer_object.preprocess(document)
         
     def add_document(self, document):
         processor = self.indexer_object()
