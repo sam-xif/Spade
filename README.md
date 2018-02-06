@@ -15,7 +15,10 @@ Search for these packages online (install script coming soon):
 
 #### Code Architecture
 * `src.db` module
+
 Contains the database schema and other database code
+
 * `src.processing` module
+
 `indexer.py` exposes a general indexer object and some basic implementations.
 `index.py` will likely be obsolete once `indexer.py` reaches a functional level. The index data will simply be stored in the Indexer object, and Latent Semantic Analysis will be performed on that data.
