@@ -14,11 +14,15 @@ Search for these packages online (install script coming soon):
 ### Description
 
 #### Code Architecture
-* `src.db` module
+##### `src.db` module
 
 Contains the database schema and other database code
 
-* `src.processing` module
+##### `src.processing` module
 
 `indexer.py` exposes a general indexer object and some basic implementations.
 `index.py` will likely be obsolete once `indexer.py` reaches a functional level. The index data will simply be stored in the Indexer object, and Latent Semantic Analysis will be performed on that data.
+
+##### `migrate_repo`
+
+This directory contains the data used by `sqlalchemy-migrate` to keep track of version history of the database schema.
