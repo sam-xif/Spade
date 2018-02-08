@@ -1,11 +1,18 @@
 """
 indexer.py
+
+(This file may be obsolete)
 """
 
 import nltk
 from nltk.tokenize import TweetTokenizer
+
 #from nltk.tokenize.punkt import word_tokenize
-from index import Index
+#from index import Index
+
+from nltk.corpus import stopwords
+from src.db.comment import Comment
+from nltk.stem.porter import *
 
 class Indexer:
     """
@@ -23,11 +30,12 @@ class Indexer:
         
 class BasicIndexer(Indexer):
     def __init__(self):
-        pass
+        self.documents = []
 
     def index(self, data):
-        # As of now, the data is expected to be text
-        pass
+        # The data should be raw text
+        c = self.preprocess(data)
+        self.documents.append(c)
         
     def preprocess(self, document):
         # Tweet tokenize
@@ -35,9 +43,20 @@ class BasicIndexer(Indexer):
         # Porter stemmer
         
         tok = TweetTokenizer(strip_handles=True, reduce_len=True)
-        words = tok.tokenize(document)
+        words = [w.lower() for w in tok.tokenize(document)] # Tokenize the document and make all the words lowercase
+        stopwords = stopwords.words('english')
         
-        pass
+        # Remove stopwords
+        words = [w for w in words if w not in stopwords]
+        
+        # Separate text into hashtags and actual text
+        c = Comment(words)
+        
+        # Stem the words
+        stemmer = PorterStemmer()
+        c.words = [stemmer.stem(w) for w in c.words]
+        
+        return c
 
 class POSIndexer(Indexer):
     def __init__(self):
