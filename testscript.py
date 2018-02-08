@@ -19,5 +19,13 @@ for l in lines:
     ind.index(l)
     
 lsa = LSA(ind)
+words = set()
 
-print(lsa.tfidf_all(sys.argv[1]))
+for d in lsa.index.documents:
+    words.update(d.words)
+
+for w in words:
+    print("{} : {}".format(w, lsa.tfidf_all(w)).encode('utf-8').decode('ascii', errors='replace'))
+    
+    
+#print(lsa.tfidf_all(sys.argv[1]))
