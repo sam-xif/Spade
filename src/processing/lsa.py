@@ -6,6 +6,11 @@ Module that performs clustering using latent semantic analysis on a group of com
 from math import log
 from src.processing.index import Index
 from nltk.stem.porter import *
+import numpy as np
+
+from sklearn.cluster import KMeans
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 class LSA:
     def __init__(self, index):
@@ -32,5 +37,21 @@ class LSA:
     def tfidf_all(self, term):
         return [self.tfidf(term, doc) for doc in self.index.documents]
             
-        
+    def cluster(self, matrix, num_clusters=5):
+        km = KMeans(n_clusters=num_clusters)
+        km.fit(matrix)
+        return km
     
+    def generate_tfidf_matrix(self):
+        matrix = []
+        words = set()
+
+        for d in self.index.documents:
+            words.update(d.words)
+        
+        words_list = list(words)
+        for w in words_list:
+            matrix.append(self.tfidf_all(w))
+            
+        return words_list, np.array(matrix)
+            
