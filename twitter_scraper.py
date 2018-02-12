@@ -1,4 +1,4 @@
-#Twitter Scraper
+#Twitter Scrape
 
 import tweepy
 from nltk.stem.porter import PorterStemmer
