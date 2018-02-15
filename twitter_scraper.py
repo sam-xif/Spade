@@ -5,6 +5,7 @@ import re
 from collections import Counter
 import pandas as pd
 from src.processing.index import Index
+from src.processing.lsa import LSA
 
 def get_api():
     a = open('keys.txt')
@@ -19,17 +20,23 @@ def get_tweet_stream(keyword):
     for i in tweepy.Cursor(get_api().search, q=keyword).items(25):
         tweets.append(i.text.encode("utf-8"))
     df = pd.DataFrame(tweets, columns = ['Tweet'])
-    df = clean(df)
-    return df
+    return get_tfidf_matrix(get_index(df))
 
-def clean(df):
+def get_index(df):
     a = Index()
     tweet_contents = df['Tweet'].values
-    tweet_contents = [str(x.decode('utf-8')) for x in tweet_contents]
-    print(tweet_contents)
-    tweets_cleaned = a.preprocess(tweet_contents)                      #Fix str/byte error
-    df_=pd.DataFrame(tweets_cleaned, columns = ['Tweet'])
-    df_.to_csv("twitter_data.csv")
-    return df_
+    tweet_contents = [(x.decode('utf-8')) for x in tweet_contents]
+    tweets_cleaned = []
+    for tweet in tweet_contents:
+        tweet = a.index(tweet)
+        tweets_cleaned.append(tweet)                    #Fix str/byte error
+    df_=pd.DataFrame(tweets_cleaned)
+    print(a.documents)
+    #df_.to_csv("twitter_data.csv")
+    return a
 
-print(get_tweet_stream('dog'))
+def get_tfidf_matrix(index):
+    l = LSA(index)
+    return l.generate_tfidf_matrix()
+
+(get_tweet_stream('dog'))
