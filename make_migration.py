@@ -17,15 +17,16 @@ to_stdout = False
 dry = False
 models_dir = '{0}/versions/models'.format(repo_dir)
 models_dir_modified = False
+python_executable = 'python'
 
 # Loop that grabs command line arguments
 i = 1
 while i < len(sys.argv):
     if sys.argv[i] == '-h' or sys.argv[i] =='--help' or sys.argv[i] == 'help':
-        print('Author: Sam Xifaras', 
+        print('Author: Sam Xifaras',
               '',
               'Usage: python make_upgrade.py [options] MESSAGE',
-              'Description: Compares the current database schema to that in the source code', 
+              'Description: Compares the current database schema to that in the source code',
               'Note: All paths given as arguments to the command must be relative paths.',
               '',
               'Options:',
@@ -36,11 +37,11 @@ while i < len(sys.argv):
               '  --dry : Runs the script and prints normal output but does not modify the filesystem or the database',
               '          This is useful for debugging or making sure the script looks correct (in combinations with --to-stdout)',
               '  --models-dir MODELS_DIR : Specifies the directory where the schemas of previous versions will be saved.',
-              '          The script needs to save previous schemas so it can generate migrations that work properly.'
+              '          The script needs to save previous schemas so it can generate migrations that work properly.',
+              '  --python-exec NAME : Specifies the python executable to run',
               '',
               'Positional arguments:',
-              '  MESSAGE : The short title/description of the upgrade',
-              sep='\n')
+              '  MESSAGE : The short title/description of the upgrade', sep='\n')
         exit()
     elif sys.argv[i] == '--repo-dir':
         repo_dir = sys.argv[i + 1]
@@ -56,9 +57,12 @@ while i < len(sys.argv):
         to_stdout = True
     elif sys.argv[i] == '--dry': # Shows all normal output but does not actually create an upgrade script
         dry = True
-    elif sys.argv[i] =='--models-dir':
+    elif sys.argv[i] == '--models-dir':
         models_dir = sys.argv[i + 1]
         models_dir_modified = True
+        i += 1
+    elif sys.argv[i] == '--python-exec':
+        python_executable = sys.argv[i + 1]
         i += 1
     elif sys.argv[i].startswith('-'):
         print('ERROR: Unknown option {0}'.format(sys.argv[i].strip('-')))
@@ -92,8 +96,8 @@ previous_script = get_most_recent_script()
 previous_version_num = re.match(r'([0-9]+).*', previous_script).group(1)
 
 # Create the script using manage.py
-script_process = subprocess.run(['python', 'manage.py', 'make_update_script_for_model', 
-                                 '--oldmodel={0}.model{1}.metadata'.format(models_dir.replace('/', '.').replace('\\', '.'), previous_version_num), 
+script_process = subprocess.run([python_executable, 'manage.py', 'make_update_script_for_model',
+                                 '--oldmodel={0}.model{1}.metadata'.format(models_dir.replace('/', '.').replace('\\', '.'), previous_version_num),
                                  '--model={0}'.format(model_name)], stdout=subprocess.PIPE)
 script = script_process.stdout
 
@@ -102,7 +106,7 @@ if to_stdout:
     print(script.decode('utf-8'))
 
 if not dry:
-    subprocess.run(['python', 'manage.py', 'script', '"{0}"'.format(message)])
+    subprocess.run([python_executable, 'manage.py', 'script', '"{0}"'.format(message)])
     new_script = get_most_recent_script()
 
     upgrade_script_path = '{0}/versions/{1}.py'.format(repo_dir, new_script)
@@ -114,10 +118,10 @@ if not dry:
     new_version_num = re.match(r'([0-9]+).*', new_script).group(1)
     with open(schema_file, 'r') as file:
         models_text = file.read()
-    
+
     model_path = '{0}/model{1}.py'.format(models_dir, new_version_num)
     print('Copying current {0} > {1}'.format(schema_file, model_path))
-    
+
     with open(model_path, 'w+') as file:
         file.write(models_text)
 
