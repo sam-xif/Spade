@@ -41,3 +41,8 @@ Restructured he index module and added the latent semantic analysis module.
 ### Feb 8, 2018
 
 Created this changelog.
+
+### Feb 19, 2018
+
+Fixed `make_migration.py` and added a version of `rebuild_db.bat` for Bash (`rebuild_db.sh`).
+Additionally, added more database models to facilitate the storage of tf-idf matrices.
