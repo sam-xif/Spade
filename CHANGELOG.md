@@ -46,3 +46,7 @@ Created this changelog.
 
 Fixed `make_migration.py` and added a version of `rebuild_db.bat` for Bash (`rebuild_db.sh`).
 Additionally, added more database models to facilitate the storage of tf-idf matrices.
+
+### Feb 20, 2018
+
+Added the `DBController` class, which allows for easy access to adding to and querying the database.

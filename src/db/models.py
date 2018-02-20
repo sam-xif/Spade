@@ -32,7 +32,9 @@ class Document(Base):
     __tablename__ = 'documents'
 
     ID = Column(Integer, primary_key=True)
-    text = Column(String)
+    words = Column(String)
+    tags = Column(String)
+    raw = Column(String)
 
 class Term(Base):
     __tablename__ = 'terms'
