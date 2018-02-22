@@ -10,7 +10,7 @@ from nltk.tokenize import TweetTokenizer
 #from index import Index
 
 from nltk.corpus import stopwords
-from src.db.comment import Comment
+from src.db.document import Document
 from nltk.stem.porter import *
 
 class Index:
@@ -46,7 +46,7 @@ class Index:
         words = [w for w in words if re.match(url_re, w) is None]
 
         # Separate text into hashtags and actual text
-        c = Comment(words)
+        c = Document(words, document)
 
         # Stem the words
         stemmer = PorterStemmer()

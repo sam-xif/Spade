@@ -26,11 +26,22 @@ class DBController:
      which is a function that somehow defines the "distance" between two documents.
 
     TODO: Modify the above statement, which doesn't accurately describe this class
+
+    Usage:
+    dbcon = DBController()
+    # To create a new session:
+    with dbcon as session:
+        session.query(...)
+        session.add(...)
+        session.commit()
+
+    # Repeat to create more sessions
+
     """
 
-    def __init__(self):
-        self.engine = create_engine(CONNECT_STRING, module=sqlite, echo=DEBUG)
-        self.Session = sessionmaker(bind=engine)
+    def __init__(self, connect_string, DEBUG=False):
+        self.engine = create_engine(connect_string, module=sqlite, echo=DEBUG)
+        self.Session = sessionmaker(bind=self.engine)
         self.active_session = None
 
     def __enter__(self):
@@ -42,8 +53,9 @@ class DBController:
         # Close down the database stuff
         if self.active_session is not None:
             self.active_session.close() # Maybe wrap this with a try statement
+            self.active_session = None
 
-        return isinstance(value, Error):
+        return isinstance(value, Exception)
 
 
     def destroy(self):

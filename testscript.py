@@ -18,7 +18,7 @@ lines = [l for l in lines if l != '\n']
 ind = Index()
 for l in lines:
     ind.index(l)
-    
+
 lsa = LSA(ind)
 words = set()
 
@@ -31,7 +31,7 @@ for d in lsa.index.documents:
 #print(str(lsa.generate_tfidf_matrix()[1]).encode('ascii', errors='replace').decode('ascii', errors='replace'))
 
 mat = lsa.generate_tfidf_matrix()
-np.savetxt("arr.txt", lsa.generate_tfidf_matrix()[1]) 
+np.savetxt("arr.txt", lsa.generate_tfidf_matrix()[1])
 
 km = lsa.cluster(mat[1], num_clusters=7)
 tuples = sorted(list(zip(km.labels_, mat[0])), key=lambda x: x[0])
@@ -39,3 +39,7 @@ print(str(tuples).encode('ascii', errors='replace').decode('ascii', errors='repl
 
 km = lsa.cluster(mat[1].T)
 print(km.labels_)
+
+from src.db.dbcontroller import DBController
+dbc = DBController('sqlite+pysqlite:///spade.db', DEBUG=True)
+lsa.save_to_db(dbc)
