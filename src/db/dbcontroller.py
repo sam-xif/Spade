@@ -6,7 +6,6 @@ import os
 if __name__=='__main__':
     sys.path.append(os.path.realpath('../../'))
 
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlite3 import dbapi2 as sqlite
@@ -46,6 +45,8 @@ class DBController:
 
     def __enter__(self):
         # Whenever enter is called, create a new session and make it the active session
+        if self.active_session is not None:
+            raise Exception('There is already an active session on this controller. You cannot open another one until calling __exit__() or leaving the `with` statement block.')
         self.active_session = self.Session()
         return self.active_session
 
@@ -56,7 +57,6 @@ class DBController:
             self.active_session = None
 
         return isinstance(value, Exception)
-
 
     def destroy(self):
         # Unbind the engine here if needed

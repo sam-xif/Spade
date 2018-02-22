@@ -50,3 +50,8 @@ Additionally, added more database models to facilitate the storage of tf-idf mat
 ### Feb 20, 2018
 
 Added the `DBController` class, which allows for easy access to adding to and querying the database.
+
+### Feb 22, 2018
+
+Finished `DBController` and added functionality to save the tf-idf matrix to the database.
+Started work on the query processor module.

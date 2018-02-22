@@ -17,7 +17,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import *
 Base = declarative_base()
 
-
 class Highlight(Base):
     __tablename__ = 'highlights'
 

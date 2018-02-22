@@ -12,6 +12,7 @@ from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
 from src.db.document import Document
 from nltk.stem.porter import *
+import src.db.models as models
 
 class Index:
     def __init__(self):
@@ -53,3 +54,8 @@ class Index:
         c.words = [stemmer.stem(w) for w in c.words]
 
         return c
+
+    def build_from_db(self, dbcontroller):
+        with dbcontroller as session:
+            db_documents = session.query(models.Document).all()
+            documents = [Document(x.words, x.raw) for x in db_documents]
