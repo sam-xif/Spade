@@ -58,4 +58,4 @@ class Index:
     def build_from_db(self, dbcontroller):
         with dbcontroller as session:
             db_documents = session.query(models.Document).all()
-            documents = [Document(x.words, x.raw) for x in db_documents]
+            self.documents = [Document(x.words, x.raw) for x in db_documents]

@@ -30,16 +30,17 @@ for d in lsa.index.documents:
 #np.set_printoptions(threshold=np.inf)
 #print(str(lsa.generate_tfidf_matrix()[1]).encode('ascii', errors='replace').decode('ascii', errors='replace'))
 
-mat = lsa.generate_tfidf_matrix()
-np.savetxt("arr.txt", lsa.generate_tfidf_matrix()[1])
+lsa.generate_tfidf_matrix()
+np.savetxt("arr.txt", lsa.matrix)
 
-km = lsa.cluster(mat[1], num_clusters=7)
-tuples = sorted(list(zip(km.labels_, mat[0])), key=lambda x: x[0])
+km = lsa.cluster(num_clusters=7)
+tuples = sorted(list(zip(km.labels_, lsa.word_list)), key=lambda x: x[0])
 print(str(tuples).encode('ascii', errors='replace').decode('ascii', errors='replace'))
 
-km = lsa.cluster(mat[1].T)
+km = lsa.cluster()
 print(km.labels_)
 
 from src.db.dbcontroller import DBController
 dbc = DBController('sqlite+pysqlite:///spade.db', DEBUG=True)
+lsa.generate_tfidf_matrix()
 lsa.save_to_db(dbc)

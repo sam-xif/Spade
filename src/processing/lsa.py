@@ -16,7 +16,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 class LSA:
     def __init__(self, index):
         self.index = index
-        self.word_list = self.generate_term_list()
+        self.word_list = self.generate_word_list()
 
     def tfidf(self, term, document):
         # term should be a lowercase, stemmed word
@@ -39,12 +39,14 @@ class LSA:
     def tfidf_all(self, term):
         return [self.tfidf(term, doc) for doc in self.index.documents]
 
-    def cluster(self, matrix, num_clusters=5):
+    def cluster(self, num_clusters=5):
+        print(self.matrix.shape)
         km = KMeans(n_clusters=num_clusters)
-        km.fit(matrix)
+        km.fit(self.matrix)
+        self.km = km
         return km
 
-    def generate_term_list(self):
+    def generate_word_list(self):
         words = set()
 
         for d in self.index.documents:
@@ -60,19 +62,24 @@ class LSA:
         for w in self.word_list:
             matrix.append(self.tfidf_all(w))
 
-        return self.word_list, np.array(matrix)
+        self.matrix = np.array(matrix)
 
     def save_to_db(self, dbcontroller):
-        word_list, matrix = self.generate_tfidf_matrix()
+        #word_list, matrix = self.generate_tfidf_matrix()
         with dbcontroller as session:
-            for i, word in enumerate(word_list):
+            for i, word in enumerate(self.word_list):
                 t = Term(text=word)
                 session.add(t)
                 for j, document in enumerate(self.index.documents):
                     d = Document(words=str(list(document.words)), tags=str(list(document.tags)), raw=str(document.raw))
                     session.add(d)
 
-                    tfidf_entry = TFIDF(document=d, term=t, tfidf_value=matrix[i][j])
+                    tfidf_entry = TFIDF(document=d, term=t, tfidf_value=self.matrix[i][j])
                     session.add(tfidf_entry)
 
             session.commit()
+
+    def build_from_db(self, dbcontroller):
+        self.index.build_from_db(dbcontroller)
+        with dbcontroller as session:
+            tfidf_data = session.query(TFIDF).all()
