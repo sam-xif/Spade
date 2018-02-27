@@ -33,14 +33,18 @@ for d in lsa.index.documents:
 lsa.generate_tfidf_matrix()
 np.savetxt("arr.txt", lsa.matrix)
 
-km = lsa.cluster(num_clusters=7)
+km = lsa.cluster(num_clusters=5)
 tuples = sorted(list(zip(km.labels_, lsa.word_list)), key=lambda x: x[0])
-print(str(tuples).encode('ascii', errors='replace').decode('ascii', errors='replace'))
+#print(str(tuples).encode('ascii', errors='replace').decode('ascii', errors='replace'))
 
-km = lsa.cluster()
+km = lsa.cluster(num_clusters=7, t=True)
 print(km.labels_)
+
+from src.processing.queryprocessor import QueryProcessor
+qp = QueryProcessor(lsa)
+print(qp.query("Immigration needs to be stopped"))
 
 from src.db.dbcontroller import DBController
 dbc = DBController('sqlite+pysqlite:///spade.db', DEBUG=True)
 lsa.generate_tfidf_matrix()
-lsa.save_to_db(dbc)
+#lsa.save_to_db(dbc)

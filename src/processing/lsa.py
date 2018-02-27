@@ -39,10 +39,14 @@ class LSA:
     def tfidf_all(self, term):
         return [self.tfidf(term, doc) for doc in self.index.documents]
 
-    def cluster(self, num_clusters=5):
-        print(self.matrix.shape)
+    def tfidf_document(self, doc):
+        # Potentially make this return a numpy array to conform to standards?
+        return np.array([self.tfidf(term, doc) for term in self.word_list])
+
+    def cluster(self, num_clusters=5, t=False):
+        #print(self.matrix.shape)
         km = KMeans(n_clusters=num_clusters)
-        km.fit(self.matrix)
+        km.fit(self.matrix if t == False else self.matrix.T)
         self.km = km
         return km
 
