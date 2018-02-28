@@ -55,3 +55,11 @@ Added the `DBController` class, which allows for easy access to adding to and qu
 
 Finished `DBController` and added functionality to save the tf-idf matrix to the database.
 Started work on the query processor module.
+
+### Feb 26, 2018
+
+Continued work on the query processor module.
+
+### Feb 27, 2018
+
+Finished query processor and put finishing touches on project.
