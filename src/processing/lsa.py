@@ -9,7 +9,6 @@ from nltk.stem.porter import *
 import numpy as np
 from src.db.dbcontroller import DBController
 from src.db.models import *
-
 from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import cosine_similarity # Idea: use this metric to build up a sort of covariance matrix of the documents
 from tqdm import tqdm

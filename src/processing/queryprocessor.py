@@ -32,7 +32,7 @@ class QueryProcessor:
     def match_score(self, centroid, data_pt, document, query_doc):
         # Tune as necessary
         a = 0.3
-        b = 1.5
+        b = 0.7
 
         dist = 1 / (1 + sqrt(sum([(x[1] - x[0])**2 for x in list(zip(centroid, data_pt))]))) # higher is better, 1 is added to denominator for normalization
         word_match = len(set(document.words) & set(query_doc.words)) # higher is better
