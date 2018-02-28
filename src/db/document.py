@@ -10,17 +10,28 @@ class Document:
     in the order that they appear and a set containing any hashtags in the comment.
     """
 
-    def __init__(self, words, raw):
+    def __init__(self, words, tags, raw):
         """
         words is expected to be a parameter of tokenized words in the comment
         They can be processed further.
         """
 
-        self.words = []
-        self.tags = set()
+        self.words = words
+        self.tags = tags
         self.raw = raw
+
+    @classmethod
+    def create_from_raw_list(cls, words, raw):
+        d = Document([], set(), raw)
         for w in words:
             if w.startswith('#'):
-                self.tags.add(w)
+                d.tags.add(w)
             else:
-                self.words.append(w)
+                d.words.append(w)
+        return d
+
+    def export(self):
+        """
+        Convert this object into a database model
+        """
+        pass

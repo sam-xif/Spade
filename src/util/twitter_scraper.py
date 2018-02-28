@@ -17,10 +17,12 @@ def get_api():
 
 def get_tweet_stream(keyword):
     tweets = []
-    for i in tweepy.Cursor(get_api().search, q=keyword).items(25):
-        tweets.append(i.text.encode("utf-8"))
-    df = pd.DataFrame(tweets, columns = ['Tweet'])
-    return get_tfidf_matrix(get_index(df))
+    for i in tweepy.Cursor(get_api().search, q=keyword).items(200):
+        tweets.append(i.text.encode("utf-8").decode("ascii", errors='ignore'))
+
+    ind = Index(custom_stopwords=['rt'])
+    ind.index_range(tweets)
+    return ind
 
 def get_index(df):
     a = Index()
@@ -38,5 +40,3 @@ def get_index(df):
 def get_tfidf_matrix(index):
     l = LSA(index)
     return l.generate_tfidf_matrix()
-
-(get_tweet_stream('dog'))

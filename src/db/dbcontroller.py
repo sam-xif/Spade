@@ -14,18 +14,6 @@ CONNECT_STRING='sqlite+pysqlite:///../../spade.db'
 
 class DBController:
     """
-    Allows for easy adding of documents, terms, and tf-idf data to the database.
-    Also exposes a query API to efficiently search through the comments.
-
-    How the search algorithm will work:
-
-    First, a tf-idf matrix of the set of documents will be recalled.
-    KMeans clustering will be run on it, and the search query will be treated as an extra document in the tf-idf matrix.
-    Based on the cluster the query gets assigned to, documents will be selected and ordered based on match distance,
-     which is a function that somehow defines the "distance" between two documents.
-
-    TODO: Modify the above statement, which doesn't accurately describe this class
-
     Usage:
     dbcon = DBController()
     # To create a new session:

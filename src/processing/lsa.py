@@ -11,7 +11,8 @@ from src.db.dbcontroller import DBController
 from src.db.models import *
 
 from sklearn.cluster import KMeans
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import cosine_similarity # Idea: use this metric to build up a sort of covariance matrix of the documents
+from tqdm import tqdm
 
 class LSA:
     def __init__(self, index):
@@ -22,17 +23,14 @@ class LSA:
         # term should be a lowercase, stemmed word
         # tfidf(t, d, D) = tf(t, d) * idf(t, D)
 
-        stemmer = PorterStemmer()
-        stemmed_term = stemmer.stem(term)
-
         tf = 0
         for w in document.words:
-            if w == stemmed_term:
+            if w == term:
                 tf += 1
 
         # Potential Issue: tfidf currently only uses the words and keeps hashtags separate.
         # The problem is that hashtags may contain semantic significance that we are losing.
-        idf = log(self.index.size() / (1 + len([d for d in self.index.documents if stemmed_term in d.words])))
+        idf = log(self.index.size() / (1 + len([d for d in self.index.documents if term in d.words])))
 
         return tf * idf
 
@@ -40,12 +38,11 @@ class LSA:
         return [self.tfidf(term, doc) for doc in self.index.documents]
 
     def tfidf_document(self, doc):
-        # Potentially make this return a numpy array to conform to standards?
         return np.array([self.tfidf(term, doc) for term in self.word_list])
 
     def cluster(self, num_clusters=5, t=False):
         #print(self.matrix.shape)
-        km = KMeans(n_clusters=num_clusters)
+        km = KMeans(n_clusters=num_clusters, algorithm='elkan')
         km.fit(self.matrix if t == False else self.matrix.T)
         self.km = km
         return km
@@ -63,13 +60,12 @@ class LSA:
         if self.word_list is None:
             raise Error('word_list is None')
         matrix = []
-        for w in self.word_list:
+        for w in tqdm(self.word_list):
             matrix.append(self.tfidf_all(w))
 
         self.matrix = np.array(matrix)
 
     def save_to_db(self, dbcontroller):
-        #word_list, matrix = self.generate_tfidf_matrix()
         with dbcontroller as session:
             for i, word in enumerate(self.word_list):
                 t = Term(text=word)
